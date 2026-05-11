@@ -46,8 +46,6 @@ router.get("/flights", async (req, res) => {
     where.push(`arrivalairporticao ILIKE $${values.length}`)
   }
 
-  values.push(limit)
-
   const sql = `
     SELECT
       aircraft,
