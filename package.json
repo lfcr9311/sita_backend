@@ -9,9 +9,12 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19"
   }
 }
