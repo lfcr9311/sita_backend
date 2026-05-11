@@ -1,28 +1,38 @@
-import "dotenv/config"
 import express from "express"
 import cors from "cors"
+import dotenv from "dotenv"
 import flightsRoutes from "./flights.routes.js"
 
+dotenv.config()
+
 const app = express()
-const frontendOrigin = process.env.FRONTEND_ORIGIN || "*"
 
-app.use(cors({
-  origin: frontendOrigin === "*" ? true : frontendOrigin,
-  credentials: true
-}))
+app.use(
+  cors({
+    origin: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false
+  })
+)
 
-app.get("/", (req, res) => {
+app.options("*", cors())
+
+app.use(express.json())
+
+app.get("/", (_req, res) => {
   res.json({
-    name: "SITA Points API",
-    status: "online"
+    ok: true,
+    service: "sita-backend"
   })
 })
 
 app.use("/api", flightsRoutes)
 
-app.use((req, res) => {
-  res.status(404).json({
-    error: "Rota não encontrada"
+app.use((error, _req, res, _next) => {
+  res.status(500).json({
+    error: "Erro interno no servidor",
+    message: error.message
   })
 })
 
