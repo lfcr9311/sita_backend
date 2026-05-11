@@ -1,12 +1,11 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
+import flightsRoutes from "./flights.routes.js"
 
 dotenv.config()
 
 const app = express()
-
-const PORT = Number(process.env.PORT || 8000)
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -36,6 +35,7 @@ app.use(
 
 app.options("*", cors())
 
+app.use(express.json())
 
 app.get("/", (_req, res) => {
   res.json({
@@ -44,27 +44,6 @@ app.get("/", (_req, res) => {
   })
 })
 
-app.get("/api/health", (_req, res) => {
-  res.json({
-    ok: true
-  })
-})
+app.use("/api", flightsRoutes)
 
-app.get("/api/flights", async (req, res) => {
-  try {
-    const limit = Number(req.query.limit || 50000)
-
-    res.json({
-      data: [],
-      limit
-    })
-  } catch (error) {
-    res.status(500).json({
-      error: "Erro ao buscar voos"
-    })
-  }
-})
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`)
-})
+export default app
