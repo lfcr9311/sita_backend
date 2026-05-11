@@ -22,7 +22,6 @@ router.get("/health", async (req, res) => {
 
 router.get("/flights", async (req, res) => {
   const { flight, aircraft, origem, destino } = req.query
-  const limit = Math.min(Number(req.query.limit || 50000), 100000)
 
   const where = ["coordenada IS NOT NULL"]
   const values = []
@@ -61,7 +60,6 @@ router.get("/flights", async (req, res) => {
     FROM flights
     WHERE ${where.join(" AND ")}
     ORDER BY aircraft, flight
-    LIMIT $${values.length}
   `
 
   try {
