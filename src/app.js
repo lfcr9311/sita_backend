@@ -6,8 +6,6 @@ import flightsRoutes from "./flights.routes.js"
 const app = express()
 const frontendOrigin = process.env.FRONTEND_ORIGIN || "*"
 
-app.use(express.json({ limit: "10mb" }))
-
 app.use(cors({
   origin: frontendOrigin === "*" ? true : frontendOrigin,
   credentials: true
