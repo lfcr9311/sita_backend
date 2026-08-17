@@ -20,6 +20,34 @@ router.get("/health", async (req, res) => {
   }
 })
 
+router.get("/rotas", async (req, res) => {
+  const sql = `
+    SELECT DISTINCT
+      departureairporticao AS origem,
+      arrivalairporticao AS destino
+    FROM flights
+    WHERE departureairporticao IS NOT NULL
+      AND arrivalairporticao IS NOT NULL
+      AND departureairporticao <> ''
+      AND arrivalairporticao <> ''
+    ORDER BY origem, destino
+  `
+
+  try {
+    const result = await pool.query(sql)
+
+    res.json({
+      total: result.rows.length,
+      data: result.rows
+    })
+  } catch (error) {
+    res.status(500).json({
+      error: "Erro ao buscar rotas",
+      message: error.message
+    })
+  }
+})
+
 router.get("/flights", async (req, res) => {
   const { flight, aircraft, origem, destino } = req.query
 
